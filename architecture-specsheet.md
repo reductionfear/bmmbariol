@@ -1,4 +1,4 @@
-I'll help you create a spec sheet for implementing the idea from your repository. Let me first gather information about the relevant files and structure. Now let me get more details from the key files to understand the architecture: Now let me get more details about the EngineWS structure and models to create a comprehensive spec sheet. Now I have a comprehensive understanding of the codebase. Let me create a detailed spec sheet for implementing the Lichess External Engine integration using WebSocket (WSS) in Go.
+implementing the idea from here. first gather information about the relevant files and structure. get more details from the key files to understand the architecture: get more details about the EngineWS structure and models to create a comprehensive workflow. a comprehensive understanding of the codebase. create a project for implementing the Lichess External Engine integration using WebSocket (WSS) in Go.
 
 ---
 
