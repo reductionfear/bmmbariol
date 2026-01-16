@@ -1,0 +1,61 @@
+# BetterMint Modded Enhanced Requirements
+# Core web framework and async support
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+websockets==12.0
+
+# Chess logic and validation
+python-chess 
+# HTTP client and web utilities
+httpx==0.25.0
+requests==2.31.0
+pillow
+jinja2
+
+# Data validation and parsing
+pydantic==2.5.0
+python-multipart==0.0.6
+
+# System monitoring and process management
+psutil==5.9.6
+
+# GUI framework (Qt6-based)
+PySide6
+
+# Web engine for embedded browser (if needed)
+# PySide6-WebEngine==6.6.0  # Uncomment if using embedded browser
+
+# JSON and data handling
+python-json-logger==2.0.7
+
+# File and path utilities  
+pathlib2==2.3.7; python_version<"3.4"
+
+# Async utilities
+asyncio-mqtt==0.13.0
+
+# Development and debugging
+python-dotenv==1.0.0
+
+# Optional: Advanced chess analysis
+# python-chess-annotator==1.0.0  # Uncomment for advanced analysis features
+# stockfish==3.28.0  # Python wrapper (if not using direct engine) don't uncomment this
+
+# Optional: Enhanced logging
+structlog==23.2.0
+
+# Optional: Configuration management  
+pyyaml==6.0.1
+toml==0.10.2
+
+# Optional: Performance monitoring
+prometheus-client==0.19.0
+
+# Optional: Testing (development only)
+# pytest==7.4.3
+# pytest-asyncio==0.21.1
+# pytest-qt==4.2.0
+playwright
+# more
+pyttsx3>=2.90
+pywin32>=306
