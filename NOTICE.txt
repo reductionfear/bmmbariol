@@ -1,0 +1,38 @@
+```
+This tool includes the following third-party chess engines and components:
+---
+1. Stockfish (https://stockfishchess.org/)
+   License: GNU General Public License v3.0 (GPLv3)
+   Copyright (c) Stockfish developers
+   Source: https://github.com/official-stockfish/Stockfish
+   You may redistribute and/or modify Stockfish under the terms of the GPLv3.
+   The full text of the GPLv3 license is included in LICENSES/GPLv3.txt.
+---
+2. Lc0 - Leela Chess Zero (https://lczero.org/)
+   License: GNU General Public License v3.0 (GPLv3)
+   Copyright (c) The LCZero Team
+   Source: https://github.com/LeelaChessZero/lc0
+   This engine is included under the terms of GPLv3.
+   The full license is available in LICENSES/GPLv3.txt.
+   Note: The training data used by the Leela Chess Zero project is released 
+   under the Open Database License (ODbL). If redistributing training data, 
+   comply with ODbL terms.
+---
+3. Maia Chess (https://maiachess.com/)
+   License: GNU General Public License v3.0 (GPLv3)
+   Copyright (c) 2020 University of Toronto / CSSLab
+   Source: https://github.com/CSSLab/maia-chess
+   Both the code and neural network weights are released under GPLv3.
+   The full license is available in LICENSES/GPLv3.txt.
+   
+   Citation:
+   McIlroy-Young, Reid and Sen, Siddhartha and Kleinberg, Jon and Anderson, Ashton (2020).
+   "Aligning Superhuman AI with Human Behavior: Chess as a Model System."
+   Proceedings of the 25th ACM SIGKDD international conference on Knowledge discovery and data mining.
+---
+To comply with all licenses:
+- Keep this NOTICE file intact.
+- Do not remove credit or claim the engines as your own.
+- Provide access to full license texts.
+- When distributing, provide source code or a written offer to provide source code.
+```

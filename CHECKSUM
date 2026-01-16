@@ -1,0 +1,16 @@
+Please verify that the checksum of the installer is identical to the string below. Only download this tool from https://cgpe.netlify.app directly.
+
+PYTHON CHECKSUM - sha256:c45141389b01583ff760accf7a351b6990e1f1863a3ce7b8cdbad755224e0c1b - Please also verify the contents of the script itself
+EXE CHECKSUM    - sha256:5255d5805bf5e2a30bfbc9726ed6af764a54dc4e5dc7333cda3aa23e8cb0ddc4
+
+As for Python, the list of the domains we send request to is below. If you discover another URL in the Python script, uninstall it and download it from https://cgpe.netlify.app
+The Python script is completely open-source and readable.
+BetterMint Modded will always remain free. If you paid for this, you have been scammed; immediately refund and/or sue.
+
+python.org/*
+github.com/BotSolvers/BetterMint/*
+github.com/BarioIsCoding/*
+github.com/LeelaChessZero/*
+github.com/official-stockfish/*
+github.com/CSSLab/maia-chess/*
+cgpe.netlify.app/* - Note: This one is listed as text but we do not send request to this URL (yet).
