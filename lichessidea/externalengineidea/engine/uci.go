@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/reductionfear/bmmbariol/lichessidea/externalengineidea/utils"
 )
@@ -83,12 +84,32 @@ func (e *UCIEngine) Stop() error {
 	// Signal stop
 	close(e.stopChan)
 
-	// Wait for goroutines to finish
-	<-e.stoppedChan
+	// Wait for goroutines to finish with timeout
+	select {
+	case <-e.stoppedChan:
+		utils.Logger.Debug("Engine output reader stopped gracefully")
+	case <-time.After(5 * time.Second):
+		utils.Logger.Warn("Engine output reader didn't stop within timeout")
+	}
 
-	// Wait for process to exit (with timeout would be better in production)
+	// Wait for process to exit with timeout
 	if e.cmd != nil && e.cmd.Process != nil {
-		e.cmd.Wait()
+		done := make(chan error, 1)
+		go func() {
+			done <- e.cmd.Wait()
+		}()
+
+		select {
+		case err := <-done:
+			if err != nil {
+				utils.Logger.Warnf("Engine process exited with error: %v", err)
+			}
+		case <-time.After(3 * time.Second):
+			utils.Logger.Warn("Engine process didn't exit within timeout, forcing kill")
+			if err := e.cmd.Process.Kill(); err != nil {
+				utils.Logger.Errorf("Failed to kill engine process: %v", err)
+			}
+		}
 	}
 
 	utils.Logger.Info("UCI engine stopped")

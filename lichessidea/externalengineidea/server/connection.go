@@ -161,11 +161,6 @@ func (m *ConnectionManager) ReleaseEngineLock(conn *websocket.Conn) bool {
 	m.engineLock.Lock()
 	defer m.engineLock.Unlock()
 
-	return m.releaseEngineLockInternal(conn)
-}
-
-// releaseEngineLockInternal releases the engine lock (must be called with engineLock held)
-func (m *ConnectionManager) releaseEngineLockInternal(conn *websocket.Conn) bool {
 	if !m.engineLocked || m.lockHolder != conn {
 		return false
 	}
@@ -173,13 +168,25 @@ func (m *ConnectionManager) releaseEngineLockInternal(conn *websocket.Conn) bool
 	m.engineLocked = false
 	m.lockHolder = nil
 
-	// Update the session (m.mu must be held by caller or acquired here)
-	// Since this is internal and called from RemoveConnection which holds m.mu,
-	// we need to be careful. Let's use TryRLock pattern or ensure caller handles it.
-	// For now, assume caller holds m.mu or we do it here.
-	
-	// We need the connection to update session, but this is tricky with locks.
-	// Let's simplify: just update the lock state, session update happens elsewhere.
+	// Update the session to reflect lock release
+	m.mu.RLock()
+	if connection, exists := m.connections[conn]; exists {
+		connection.session.ReleaseLock()
+	}
+	m.mu.RUnlock()
+
+	return true
+}
+
+// releaseEngineLockInternal releases the engine lock without updating session
+// Used internally when session is already being updated or cleaned up
+func (m *ConnectionManager) releaseEngineLockInternal(conn *websocket.Conn) bool {
+	if !m.engineLocked || m.lockHolder != conn {
+		return false
+	}
+
+	m.engineLocked = false
+	m.lockHolder = nil
 	return true
 }
 

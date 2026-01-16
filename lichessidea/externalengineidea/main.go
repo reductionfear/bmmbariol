@@ -170,42 +170,18 @@ func loadConfiguration() (*config.Config, error) {
 	}
 
 	// Override with command-line flags (flags take precedence)
-	if flag.Lookup("addr").Value.String() != flag.Lookup("addr").DefValue {
-		cfg.Address = *addr
-	}
-	if flag.Lookup("engine").Value.String() != flag.Lookup("engine").DefValue {
-		cfg.EnginePath = *enginePath
-	}
-	if flag.Lookup("authwrite").Value.String() != flag.Lookup("authwrite").DefValue {
-		cfg.AuthWrite = *authWrite
-	}
-	if flag.Lookup("authread").Value.String() != flag.Lookup("authread").DefValue {
-		cfg.AuthRead = *authRead
-	}
-	if flag.Lookup("localhost").Value.String() != flag.Lookup("localhost").DefValue {
-		cfg.LocalhostBypass = *localhostBypass
-	}
-	if flag.Lookup("tls").Value.String() != flag.Lookup("tls").DefValue {
-		cfg.TLS = *tls
-	}
-	if flag.Lookup("cert").Value.String() != flag.Lookup("cert").DefValue {
-		cfg.CertFile = *certFile
-	}
-	if flag.Lookup("key").Value.String() != flag.Lookup("key").DefValue {
-		cfg.KeyFile = *keyFile
-	}
-	if flag.Lookup("multipv").Value.String() != flag.Lookup("multipv").DefValue {
-		cfg.MultiPV = *multiPV
-	}
-	if flag.Lookup("threads").Value.String() != flag.Lookup("threads").DefValue {
-		cfg.Threads = *threads
-	}
-	if flag.Lookup("hash").Value.String() != flag.Lookup("hash").DefValue {
-		cfg.Hash = *hash
-	}
-	if flag.Lookup("intelligence").Value.String() != flag.Lookup("intelligence").DefValue {
-		cfg.IntelligenceEnabled = *intelligence
-	}
+	overrideIfSet("addr", func() { cfg.Address = *addr })
+	overrideIfSet("engine", func() { cfg.EnginePath = *enginePath })
+	overrideIfSet("authwrite", func() { cfg.AuthWrite = *authWrite })
+	overrideIfSet("authread", func() { cfg.AuthRead = *authRead })
+	overrideIfSet("localhost", func() { cfg.LocalhostBypass = *localhostBypass })
+	overrideIfSet("tls", func() { cfg.TLS = *tls })
+	overrideIfSet("cert", func() { cfg.CertFile = *certFile })
+	overrideIfSet("key", func() { cfg.KeyFile = *keyFile })
+	overrideIfSet("multipv", func() { cfg.MultiPV = *multiPV })
+	overrideIfSet("threads", func() { cfg.Threads = *threads })
+	overrideIfSet("hash", func() { cfg.Hash = *hash })
+	overrideIfSet("intelligence", func() { cfg.IntelligenceEnabled = *intelligence })
 
 	// Parse UCI args from flag
 	if *uciArgsFlag != "" {
@@ -213,6 +189,14 @@ func loadConfiguration() (*config.Config, error) {
 	}
 
 	return cfg, nil
+}
+
+// overrideIfSet checks if a flag was explicitly set and applies the override function
+func overrideIfSet(name string, override func()) {
+	f := flag.Lookup(name)
+	if f != nil && f.Value.String() != f.DefValue {
+		override()
+	}
 }
 
 // prepareUCIArgs prepares UCI initialization arguments from config
