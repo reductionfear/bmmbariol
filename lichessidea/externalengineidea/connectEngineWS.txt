@@ -1,1 +1,1 @@
-idea is to work with EnginesWS
+idea is to work with EnginesWS use all engines with thier dependency following its filestructure, using wss for engine, but using go in place of python
