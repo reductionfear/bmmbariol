@@ -1,43 +1,136 @@
-# Chesshook intermediary
+# Lichess External Engine Server (Go)
 
-A simple server to run a chess engine and communicate with the chesshook userscript. Generates a random passkey on startup. The passkey is used to authenticate the userscript, and is printed to the console on startup. The server has hardcoded values whether the key is required for read or write access. By default the key is required for write access, but not for read access.
+A production-ready WebSocket server for integrating chess engines with the Lichess External Engine protocol. Built with Go for high performance and reliability.
+
+## Features
+
+- 🚀 **High Performance**: Built with Go's concurrency primitives for efficient multi-client handling
+- 🔒 **Secure**: TLS/WSS support, authentication, and localhost bypass
+- 🎯 **UCI Compatible**: Full UCI protocol support for any chess engine
+- 🧠 **Intelligence System**: Experimental move modification system (optional)
+- 📊 **Production Ready**: Structured logging with zap, graceful shutdown, configurable options
+- 🔧 **Flexible Configuration**: Command-line flags and JSON config file support
+
+## Architecture
+
+The server is built with a modular architecture following the specification in `architecture-specsheet.md`:
+
+```
+├── main.go                    # Entry point & HTTP server
+├── config/                    # Configuration management
+│   └── config.go
+├── server/                    # WebSocket server components
+│   ├── websocket.go          # Main WebSocket handler
+│   ├── auth.go               # Authentication logic
+│   ├── connection.go         # Connection manager
+│   └── message.go            # Message parsing/routing
+├── engine/                    # UCI engine management
+│   └── uci.go                # UCI protocol implementation
+├── intelligence/              # Move intelligence system
+│   └── settings.go
+├── models/                    # Data models
+│   ├── move.go
+│   ├── game_state.go
+│   └── analysis.go
+├── chess/                     # Chess logic
+│   └── board.go
+└── utils/                     # Utilities
+    ├── logger.go             # Structured logging
+    └── helpers.go
+```
+
+## Installation
+
+### Prerequisites
+
+- [Go 1.21+](https://go.dev/dl/)
+- A UCI-compatible chess engine (e.g., Stockfish)
+
+### Building from Source
+
+```bash
+cd lichessidea/externalengineidea
+go build -o lichess-engine-server
+```
 
 ## Usage
-- I have not included precompiled binaries. Please use [go](https://go.dev/dl/) to compile the program using `go build main.go`. 
-- Command line flags:
-    - `-help`: prints usage.
-    - `-addr <string>`: the http service address. default: localhost:8080
-    - `-engine <string>`:  path to the engine binary. you must include `./` for relative paths. default: stockfish
-    - `-authwrite <bool>`: whether the passkey is required for write access. default: true
-    - `-authread <bool>`: whether the passkey is required for read access. default: false
-    - `-localhostbypass <bool>`: whether the passkey is required for localhost connections. default: true
-    - `-uciargs <string>`: arguments to pass to the engine on startup, split with semicolons ";". Should look like "setoption name Skill Level value 20;setoption name Threads value 10"
-- Place the engine executable in the same folder as the server executable.
-- `./main -engine ./<name of engine>`
-    - the output should be similar to:
-    ```
-    Server started, passkey: 4QZB13qLMj
-    Server is requesting authentication for read operations: false
-    Server is requesting authentication for write operations: true
-    Server is bypassing authentication for localhost connections: true
-    engine: Stockfish 15.1 by the Stockfish developers (see AUTHORS file)
-    engine: id name Stockfish 15.1
-    ...
-    ```
-- Configure the Chesshook userscript.
-    - set the engine to external.
-    - set the passkey to the passkey printed to your console. it will change every time the server is restarted.
-        - this is not necessary if you do not set `-localhostbypass` to false, and the server is on localhost.
-    - in the server is running on the same machine, the url of the engine is `ws://localhost:8080/ws`.
-        - if the server is running on a different machine, replace `localhost` with the address of the machine.
-    - go to the "external" page from the hamburger menu.
-        - the top panel will report if you are connected to the server.
-        - you should also see some messages like `New ws opened: 127.0.0.1:12345`, `recv: whoareyou`, and `recv: whatengine` in the console.
-        - by default, you will only try to authenticate once your client recieves `autherr` from the server.
-        - the client will not try to reconnect to server. you will need to refresh the page or change the engine option to reconnect.
 
-## Developer Usage
-More advanced users may find it helpful
+### Basic Usage
+
+```bash
+./lichess-engine-server -engine ./stockfish
+```
+
+The server will:
+1. Generate a random authentication passkey (printed to console)
+2. Start listening on `ws://localhost:8080/ws`
+3. Initialize the chess engine
+
+### Command-Line Flags
+
+| Flag | Type | Default | Description |
+|------|------|---------|-------------|
+| `-addr` | string | `localhost:8080` | HTTP service address |
+| `-engine` | string | `./stockfish` | Path to engine binary |
+| `-authwrite` | bool | `true` | Require auth for write operations |
+| `-authread` | bool | `false` | Require auth for read operations |
+| `-localhost` | bool | `true` | Bypass auth for localhost |
+| `-tls` | bool | `false` | Enable TLS/WSS |
+| `-cert` | string | - | TLS certificate file |
+| `-key` | string | - | TLS private key file |
+| `-config` | string | - | JSON configuration file |
+| `-multipv` | int | `3` | Multi-PV count for analysis |
+| `-threads` | int | `1` | Number of engine threads |
+| `-hash` | int | `128` | Hash table size in MB |
+| `-intelligence` | bool | `false` | Enable intelligence system |
+| `-debug` | bool | `false` | Enable debug logging |
+| `-uciargs` | string | - | UCI commands (semicolon-separated) |
+
+### Examples
+
+**Basic Stockfish with custom options:**
+```bash
+./lichess-engine-server -engine ./stockfish -multipv 5 -threads 4 -hash 512
+```
+
+**With UCI arguments:**
+```bash
+./lichess-engine-server -engine ./stockfish -uciargs "setoption name Contempt value 0;setoption name Skill Level value 20"
+```
+
+**Secure WebSocket (WSS):**
+```bash
+./lichess-engine-server -tls -cert server.crt -key server.key -addr :8443
+```
+
+**Using config file:**
+```bash
+./lichess-engine-server -config config.json
+```
+
+### Configuration File
+
+Create a `config.json` file:
+
+```json
+{
+  "address": "localhost:8080",
+  "tls": false,
+  "auth_write": true,
+  "auth_read": false,
+  "localhost_bypass": true,
+  "engine_path": "./stockfish",
+  "multipv": 5,
+  "threads": 4,
+  "hash": 512,
+  "uci_args": [
+    "setoption name Contempt value 0"
+  ],
+  "intelligence_enabled": false
+}
+```
+
+## Protocol Documentation
 
 ### Version Checking
 
