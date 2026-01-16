@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Lichess External Engine",
+  "version": "2.1",
+  "description": "Chess analysis with external engine support for Lichess",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://lichess.org/*",
+    "*://www.lichess.org/*",
+    "ws://localhost:8080/*",
+    "ws://127.0.0.1:8080/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://lichess.org/*", "*://www.lichess.org/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js", "chess.js", "stockfish.js"],
+      "matches": ["*://lichess.org/*", "*://www.lichess.org/*"]
+    }
+  ],
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
