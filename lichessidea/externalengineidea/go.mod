@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/gorilla/websocket v1.5.1
+	github.com/notnil/chess v1.9.0
 	go.uber.org/zap v1.27.1
 )
 
