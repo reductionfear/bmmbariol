@@ -1,0 +1,38 @@
+file strucure of engines, books , etc
+\EngineWS
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        08/11/2025     22:39                bin
+d-----        08/11/2025     22:39                books
+d-----        08/11/2025     22:39                ctg
+d-----        08/11/2025     22:39                debug
+d-----        14/11/2025     15:05                engines
+d-----        08/11/2025     22:39                engines & books
+d-----        08/11/2025     23:30                gui
+d-----        08/11/2025     22:39                icons
+d-----        08/11/2025     23:29                logs
+d-----        08/11/2025     22:39                multi
+d-----        08/11/2025     22:39                personalities
+d-----        08/11/2025     22:39                templates
+d-----        08/11/2025     23:05                venv
+d-----        08/11/2025     22:50                weights
+d-----        08/11/2025     23:52                __pycache__
+-a----        25/11/2025     13:59           1877 betterMint_settings.json
+-a----        08/11/2025     22:39           7593 constants.py
+-a----        08/11/2025     22:39          49510 engine.py
+-a----        08/11/2025     22:39          16397 enhanced_threat_detection.py
+-a----        08/11/2025     22:39           4532 game_state_manager.py
+-a----        08/11/2025     22:39             46 install git.txt
+-a----        08/11/2025     22:39          27811 main.py
+-a----        08/11/2025     22:39          30425 models.py
+-a----        08/11/2025     22:39         688600 Montserrat.ttf
+-a----        08/11/2025     22:39           1272 requirements.txt
+-a----        08/11/2025     22:39             39 run.bat
+-a----        08/11/2025     22:39           4576 RunUnix.sh
+-a----        08/11/2025     22:39           4367 RunWindows.bat
+-a----        08/11/2025     22:39              1 server
+-a----        08/11/2025     22:39          69578 server.py
+-a----        08/11/2025     22:39           8062 server_commands.py
+-a----        08/11/2025     22:39          21863 settings.py
+-a----        08/11/2025     22:39             30 version
